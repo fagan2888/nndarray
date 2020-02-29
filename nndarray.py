@@ -363,8 +363,3 @@ def _nnumpy_concatenate(A, axis=None):
     else:
         newaxis = A[0]._axis_name2num(axis)
     return nndarray(np.concatenate(A, axis=newaxis), A[0].dimension_names)
-        
-# convolve, correlate, corrcoef, concatenate
-def _nnumpy_getattr(self, name):
-    realfunc = getattr(np, name)
-    

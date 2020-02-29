@@ -344,3 +344,27 @@ class nndarray(np.ndarray):
         if "__DUMMY_DIM__" in out.dimension_names:
             out = out.squeeze("__DUMMY_DIM__")
         return out
+
+nnumpy = object()
+
+def _nnumpy_concatenate(A, axis=None):
+    if len(A) == 1:
+        return A[0]
+    for i in range(0, len(A)-1):
+        a,b = _broadcast(A[i], A[i+1])
+        A[i] = a
+        A[i+1] = b
+    for i in reversed(range(0, len(A)-1)):
+        a,b = _broadcast(A[i], A[i+1])
+        A[i] = a
+        A[i+1] = b
+    if axis is None:
+        newaxis = 0
+    else:
+        newaxis = A[0]._axis_name2num(axis)
+    return nndarray(np.concatenate(A, axis=newaxis), A[0].dimension_names)
+        
+# convolve, correlate, corrcoef, concatenate
+def _nnumpy_getattr(self, name):
+    realfunc = getattr(np, name)
+    

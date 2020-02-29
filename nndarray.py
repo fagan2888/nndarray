@@ -57,6 +57,7 @@ def _wrap_binop(funcname, rightop=False):
         out = getattr(np.ndarray, funcname)(lhs, rhs)
         out.dimension_names = dimnames
         return out
+    return newfunc
 
 def _wrap_arrayfunc(funcname):
     """Wrapper for array functions functions which return nndarrays
@@ -218,13 +219,6 @@ class nndarray(np.ndarray):
     __gt__ = _wrap_binop("__gt__")
     __le__ = _wrap_binop("__le__")
     __ge__ = _wrap_binop("__ge__")
-    
-    def __mul__(self, other):
-        lhs, rhs = _broadcast(self, other)
-        dimnames = lhs.dimension_names
-        out = np.ndarray.__mul__(lhs, rhs)
-        out.dimension_names = dimnames
-        return out
     
     def transpose(self, *axes):
         # Default with no arguments is to reverse the axes

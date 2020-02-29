@@ -1,11 +1,13 @@
 # Named NDArrays
+# 2020 Max Shinn <maxwell.shinn@yale.edu>
+# Available under the MIT license
+
+import numpy as np
 
 def check_lengths_match(a, b):
     lens_a = sorted(list(zip(a.dimension_names, a.shape)))
     lens_b = sorted(list(zip(b.dimension_names, b.shape)))
     assert lens_a == lens_b, "Dimension error"
-
-import numpy as np
 
 def _broadcast(lhs, rhs):
     """Here we implement numpy-incompatible broadcasting rules
@@ -338,8 +340,6 @@ class nndarray(np.ndarray):
         if "__DUMMY_DIM__" in out.dimension_names:
             out = out.squeeze("__DUMMY_DIM__")
         return out
-
-nnumpy = object()
 
 def _nnumpy_concatenate(A, axis=None):
     if len(A) == 1:
